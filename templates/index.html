@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fun Footy — Random Close Finish</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 2.5rem;
+      max-width: 420px;
+      width: 100%;
+      margin: 1rem;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+    .subtitle {
+      color: #8a8a9a;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: #b0b0c0;
+      margin-bottom: 0.3rem;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      background: #0f3460;
+      color: #e0e0e0;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      appearance: auto;
+    }
+    .year-row {
+      display: flex;
+      gap: 1rem;
+    }
+    .year-row > div { flex: 1; }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .checkbox-row label {
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+    .checkbox-row input {
+      width: 1.1rem;
+      height: 1.1rem;
+      cursor: pointer;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 6px;
+      background: #e94560;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #c73e54; }
+    .note {
+      color: #6a6a7a;
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      line-height: 1.4;
+    }
+    .error {
+      background: #4a1525;
+      border: 1px solid #e94560;
+      border-radius: 6px;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fun Footy</h1>
+    <p class="subtitle">Watch a random close finish AFL game — no spoilers!</p>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/randomise">
+      <label for="team">Team (optional)</label>
+      <select id="team" name="team">
+        <option value="">Any team</option>
+        {% for t in teams %}
+        <option value="{{ t }}">{{ t }}</option>
+        {% endfor %}
+      </select>
+
+      <div class="year-row">
+        <div>
+          <label for="min_year">From</label>
+          <select id="min_year" name="min_year">
+            {% for y in range(2012, 2026) %}
+            <option value="{{ y }}">{{ y }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label for="max_year">To</label>
+          <select id="max_year" name="max_year">
+            {% for y in range(2012, 2026) %}
+            <option value="{{ y }}" {{ "selected" if y == 2025 }}>{{ y }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="finals_only" name="finals_only">
+        <label for="finals_only">Finals only</label>
+      </div>
+
+      <button type="submit">Randomise</button>
+    </form>
+    <p class="note">If you see a "403 ERROR" after clicking Randomise, try clearing your browser's site data for afl.com.au or opening the link in an incognito window.</p>
+  </div>
+</body>
+</html>
